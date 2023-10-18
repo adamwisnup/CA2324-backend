@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::post('academy', [AcademyController::class, 'create']);
+
+Route::get('academy-count', [AcademyController::class, 'countdownQuota']);
+
+Route::get('academy-data-peserta', [AcademyController::class, 'getData']);
+Route::get('academy-data-peserta/{id}', [AcademyController::class, 'getDataById']);
+Route::patch('academy-data-peserta/{id}', [AcademyController::class, 'update']);
+Route::delete('academy-data-peserta/{id}', [AcademyController::class, 'delete']);
