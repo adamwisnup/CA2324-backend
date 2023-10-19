@@ -25,6 +25,8 @@ class AcademyResource extends JsonResource
             'faculty' => $this->faculty,
             'major' => $this->major,
             'class' => $this->class,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

@@ -28,16 +28,21 @@ class AcademyController extends Controller
         if ($totalRegistrations >= 80) {
             return response()->json([
                 'status' => 422,
-                'message' => 'Kuota sudah penuh',
-            ], 422);
+                'error' => [
+                    'message' => 'Kuota sudah penuh'
+                ]
+            ])->setStatusCode(422);
         }
 
         if ($errorMessages) {
             return response()->json([
                 'status' => 422,
-                'error' => 'Unprocessable Entity',
-                'message' => implode(', ', $errorMessages),
-            ], 422);
+                'error' => [
+                    'message' => [
+                        implode(', ', $errorMessages)
+                    ]
+                ]
+            ])->setStatusCode(422);
         }
 
         $academy = new Academy([
@@ -57,17 +62,17 @@ class AcademyController extends Controller
         return (new AcademyResource($academy))->response()->setStatusCode(201);
     }
 
-    public function getdata()
+    public function getdata(): JsonResponse
     {
         $academies = Academy::all();
 
         return response()->json([
-            'status_code' => 200,
+            'status' => 200,
             'data' => $academies
-        ]);
+        ])->setStatusCode(200);
     }
 
-    public function getDataById($id)
+    public function getDataById($id): JsonResponse
     {
         $academies = Academy::find($id);
         if (!$academies) {
@@ -75,13 +80,14 @@ class AcademyController extends Controller
                 'status' => 404,
                 'message' => 'Peserta tidak terdaftar',
                 'error' => 'Not Found'
-            ], 404);
+            ])->setStatusCode(404);
         }
+
         return response()->json([
             'status' => 200,
             'message' => 'OK',
             'data' => $academies
-        ], 200);
+        ])->setStatusCode(200);
     }
 
 
@@ -96,47 +102,54 @@ class AcademyController extends Controller
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'Gagal mengupdate data peserta'
-            ], 400);
+                'error' => [
+                    'message' => 'Gagal mengupdate data peserta'
+                ]
+            ])->setStatusCode(400);
         }
     }
 
-    public function delete($id)
+    public function delete($id): JsonResponse
     {
         $academy = Academy::find($id);
 
         if (!$academy) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Data peserta tidak ditemukan'
-            ], 404);
+                'error' => [
+                    'message' => 'Data peserta tidak ditemukan'
+                ]
+            ])->setStatusCode(404);
         }
 
         if ($academy->delete()) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Data peserta berhasil dihapus'
-            ], 200);
+            ])->setStatusCode(200);
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'Gagal menghapus data peserta'
-            ], 400);
+                'error' => [
+                    'message' => 'Gagal menghapus data peserta'
+                ]
+            ])->setStatusCode(400);
         }
     }
 
-    public function countdownQuota()
+    public function countdownQuota(): JsonResponse
     {
         $totalRegistrations = Academy::count();
+
         $remainingQuota = 80 - $totalRegistrations;
         if ($remainingQuota == 0) {
             $remainingQuota = "Kuota sudah penuh";
         }
-
+        // dd($totalRegistrations);
         return response()->json([
             'status' => 200,
             'message' => 'OK',
             'remaining_quota' => $remainingQuota,
-        ], 200);
+        ])->setStatusCode(200);
     }
 }

@@ -27,4 +27,9 @@ class Academy extends Model
         'major',
         'class'
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }
