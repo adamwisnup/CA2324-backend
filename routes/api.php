@@ -19,11 +19,15 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('academy', [AcademyController::class, 'create']);
+Route::middleware(['cors'])->group(
+    function () {
+        Route::post('academy', [AcademyController::class, 'create']);
 
-Route::get('academy-count', [AcademyController::class, 'countdownQuota']);
+        Route::get('academy-count', [AcademyController::class, 'countdownQuota']);
 
-Route::get('academy-data-peserta', [AcademyController::class, 'getData']);
-Route::get('academy-data-peserta/{id}', [AcademyController::class, 'getDataById']);
-Route::patch('academy-data-peserta/{id}', [AcademyController::class, 'update']);
-Route::delete('academy-data-peserta/{id}', [AcademyController::class, 'delete']);
+        Route::get('academy-data-peserta', [AcademyController::class, 'getData']);
+        Route::get('academy-data-peserta/{id}', [AcademyController::class, 'getDataById']);
+        Route::patch('academy-data-peserta/{id}', [AcademyController::class, 'update']);
+        Route::delete('academy-data-peserta/{id}', [AcademyController::class, 'delete']);
+    }
+);
